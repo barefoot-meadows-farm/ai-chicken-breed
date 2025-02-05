@@ -66,7 +66,7 @@ def extract_pricing_table(soup):
             soup = BeautifulSoup(response.text, "html.parser")
             rows = soup.find_all("tr")
             product_prices = [
-                {size_row.get_text(strip=True): price_row.get_text(strip=True)}
+                {"size": size_row.get_text(strip=True), "price": price_row.get_text(strip=True)}
                 for i in range(0, len(rows), 2)
                 for size_row, price_row in
                 zip(rows[i].find_all("td"), rows[i + 1].find_all("td") if i + 1 < len(rows) else [])
