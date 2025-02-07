@@ -5,6 +5,7 @@ from fastapi import FastAPI, UploadFile, File
 from run import predict_breed
 from webscraper.cackle.chicken_scraper import get_chicken_info
 from webscraper.hoover.hoover_scraper import scrape_chicken_page
+from webscraper.mcmurray.chicken_scraper import scrape_mcmurray_chicken_info
 from webscraper.meyer.chicken_scraper import scrape_chicken_prices
 
 # Create a Fast API with an upload endpoint that accepts an image
@@ -28,3 +29,8 @@ async def get_breed(breed: str):
 @app.get("/cackle/chick-breed")
 async def get_breed(breed: str):
     return get_chicken_info(f"https://www.cacklehatchery.com/product/{breed}")
+
+@app.get("/mcmurray/chick-breed")
+async def get_breed(breed: str):
+    chicken = {"name": breed, "link": f"https://www.mcmurrayhatchery.com/{breed}.html"}
+    return await scrape_mcmurray_chicken_info(chicken)
