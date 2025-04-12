@@ -1,9 +1,10 @@
 from io import BytesIO
 
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks
 
 from run import predict_breed
 from webscraper.cackle.chicken_scraper import get_chicken_info
+from webscraper.chickencoopcompany.chicken_scraper import scrape_chickens
 from webscraper.hoover.hoover_scraper import scrape_chicken_page
 from webscraper.mcmurray.chicken_scraper import scrape_mcmurray_chicken_info
 from webscraper.meyer.chicken_scraper import scrape_chicken_prices
@@ -34,3 +35,11 @@ async def get_breed(breed: str):
 async def get_breed(breed: str):
     chicken = {"name": breed, "link": f"https://www.mcmurrayhatchery.com/{breed}.html"}
     return await scrape_mcmurray_chicken_info(chicken)
+
+@app.post("/scrape-chickencoop")
+async def scrape_chickencoop(background_tasks: BackgroundTasks):
+    """
+    Start a background task to scrape chicken images from chickencoopcompany.com
+    """
+    background_tasks.add_task(scrape_chickens)
+    return {"message": "Scraping started in the background. Images will be saved to ./dataset/train/{breed_name}/"}
