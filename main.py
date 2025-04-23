@@ -5,6 +5,7 @@ from typing import List, Dict, Any
 from dotenv import load_dotenv
 from fastapi import FastAPI, UploadFile, File, BackgroundTasks, Depends, HTTPException, status
 from fastapi_auth0 import Auth0, Auth0User
+from starlette.middleware.cors import CORSMiddleware
 
 from run import predict_breed
 from claude_integration import predict_breed_with_claude
@@ -26,6 +27,16 @@ app = FastAPI(
         "clientId": "R2u6cixiaKssrdBT0fXVA0Kr55L4Nhaw",
     }
 )
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
 
 load_dotenv()
 
