@@ -128,10 +128,12 @@ def get_breed_links():
                             time.sleep(1)
                             driver.execute_script("arguments[0].click();", button)
                             return True
-                        except NoSuchElementException | ElementClickInterceptedException:
+                        # FIX: Use a tuple for multiple exceptions instead of the '|' operator
+                        except (NoSuchElementException, ElementClickInterceptedException):
                             print(f"Found load more button with selector: {selector}")
                             continue
-                except NoSuchElementException | ElementClickInterceptedException:
+                # FIX: Use a tuple for multiple exceptions instead of the '|' operator
+                except (NoSuchElementException, ElementClickInterceptedException):
                     print(f"Load more button not found with selector: {selector}")
                     continue
             return False

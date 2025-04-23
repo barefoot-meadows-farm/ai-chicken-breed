@@ -59,7 +59,7 @@ model.compile(optimizer='adam',
 history = model.fit(
     train_generator,
     validation_data=val_generator,
-    epochs=10
+    epochs=25
 )
 
 # Step 4: Plot Accuracy and Loss

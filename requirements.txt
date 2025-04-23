@@ -3,6 +3,7 @@ fastapi>=0.103.0
 uvicorn>=0.23.2
 python-multipart>=0.0.6
 pydantic>=2.3.0
+fastapi-auth0>=0.5.0
 
 # Web scraping
 requests>=2.31.0
@@ -22,3 +23,6 @@ Pillow>=10.0.0
 
 # Visualization
 matplotlib>=3.7.2
+
+# AI API integration
+anthropic>=0.5.0
