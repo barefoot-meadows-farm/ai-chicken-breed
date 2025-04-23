@@ -25,4 +25,8 @@ Pillow>=10.0.0
 matplotlib>=3.7.2
 
 # AI API integration
-anthropic>=0.5.0
+anthropic>=0.7.0
+
+# Database
+supabase>=1.0.3
+python-dotenv>=1.0.0

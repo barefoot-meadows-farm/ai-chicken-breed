@@ -20,7 +20,26 @@ This project provides an API for detecting chicken breeds from images using both
    # For Auth0 authentication
    export AUTH0_DOMAIN=your-tenant.auth0.com
    export AUTH0_API_AUDIENCE=your-api-identifier
+
+   # For Supabase integration
+   export SUPABASE_URL=your_supabase_url
+   export SUPABASE_KEY=your_supabase_service_key
    ```
+
+   Alternatively, you can create a `.env` file in the root directory with these variables.
+
+### Supabase Configuration
+1. Create a Supabase account at [supabase.com](https://supabase.com) if you don't have one
+2. Create a new project in the Supabase dashboard
+3. Create a table named `uploads` with the following schema:
+   - `id`: uuid (primary key, default: `uuid_generate_v4()`)
+   - `user_email`: text (not null)
+   - `image`: text (not null) - Base64 encoded image
+   - `model_type`: text (not null) - "local" or "claude"
+   - `results`: jsonb (not null) - Prediction results
+   - `created_at`: timestamp with time zone (not null, default: `now()`)
+4. Get your Supabase URL and service key from the project settings > API
+5. Set these as environment variables as shown above
 
 ### Auth0 Configuration
 1. Create an Auth0 account at [auth0.com](https://auth0.com) if you don't have one
@@ -52,15 +71,17 @@ Authorization: Bearer your_jwt_token
 ```
 POST /upload/
 ```
-Upload an image to get chicken breed predictions using the local machine learning model.
+Upload an image to get chicken breed predictions using the local machine learning model. The image, user information, and prediction results are stored in Supabase.
 - **Authentication**: Requires `write:breeds` scope
+- **Returns**: Prediction results and upload ID
 
 ### Claude AI Prediction
 ```
 POST /upload-claude/
 ```
-Upload an image to get detailed chicken breed predictions using Claude Sonnet AI. This endpoint provides more detailed information including breed characteristics.
+Upload an image to get detailed chicken breed predictions using Claude Sonnet AI. This endpoint provides more detailed information including breed characteristics. The image, user information, and prediction results are stored in Supabase.
 - **Authentication**: Requires `write:breeds` scope
+- **Returns**: Prediction results and upload ID
 
 ### Hatchery Information Endpoints
 - `GET /meyer/chick-breed/`: Get information about a specific breed from Meyer Hatchery
@@ -75,6 +96,13 @@ Upload an image to get detailed chicken breed predictions using Claude Sonnet AI
 ### Data Collection
 - `POST /scrape-chickencoop`: Start a background task to scrape chicken images from chickencoopcompany.com
   - **Authentication**: Requires `write:breeds` scope
+
+### User Uploads
+- `GET /uploads/`: Get all uploads for the authenticated user
+  - **Authentication**: Requires authentication
+- `GET /uploads/{upload_id}`: Get a specific upload by ID
+  - **Authentication**: Requires authentication
+  - Users can only access their own uploads
 
 ### Getting an Access Token
 To obtain an access token for testing:
