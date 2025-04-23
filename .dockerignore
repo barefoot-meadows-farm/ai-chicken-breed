@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+
+# Git
+.git
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Environment variables
+.env
+.env.*
+
+# Large files that aren't needed in the container
+# Note: We need to keep chicken_breed_classifier.h5 and dataset/train for the application to run
+
+# IDE files
+.idea/
+.vscode/
+
+# Logs
+*.log

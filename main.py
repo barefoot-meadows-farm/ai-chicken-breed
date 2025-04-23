@@ -8,7 +8,7 @@ from fastapi_auth0 import Auth0, Auth0User
 
 from run import predict_breed
 from claude_integration import predict_breed_with_claude
-from supabase_integration import store_image_upload, get_user_uploads, get_upload_by_id
+# from supabase_integration import store_image_upload, get_user_uploads, get_upload_by_id
 from webscraper.cackle.chicken_scraper import get_chicken_info
 from webscraper.chickencoopcompany.chicken_scraper import scrape_chickens
 from webscraper.hoover.hoover_scraper import scrape_chicken_page
@@ -123,36 +123,36 @@ async def scrape_chickencoop(background_tasks: BackgroundTasks, user: Auth0User 
     background_tasks.add_task(scrape_chickens)
     return {"message": "Scraping started in the background. Images will be saved to ./dataset/train/{breed_name}/", "user": user.email}
 
-@app.get("/uploads/", dependencies=[Depends(auth.implicit_scheme)])
-async def get_uploads(user: Auth0User = Depends(auth.get_user)):
-    """
-    Get all uploads for the authenticated user.
-    Requires authentication.
-    """
-    uploads = get_user_uploads(user.email)
-    return {"uploads": uploads, "user": user.email}
-
-@app.get("/uploads/{upload_id}", dependencies=[Depends(auth.implicit_scheme)])
-async def get_upload(upload_id: str, user: Auth0User = Depends(auth.get_user)):
-    """
-    Get a specific upload by ID.
-    Requires authentication.
-    """
-    upload = get_upload_by_id(upload_id)
-
-    if not upload:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Upload with ID {upload_id} not found"
-        )
-
-    # Check if the upload belongs to the authenticated user
-    if upload["user_email"] != user.email:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You don't have permission to access this upload"
-        )
-
-    return {"upload": upload, "user": user.email}
+# @app.get("/uploads/", dependencies=[Depends(auth.implicit_scheme)])
+# async def get_uploads(user: Auth0User = Depends(auth.get_user)):
+#     """
+#     Get all uploads for the authenticated user.
+#     Requires authentication.
+#     """
+#     uploads = get_user_uploads(user.email)
+#     return {"uploads": uploads, "user": user.email}
+#
+# @app.get("/uploads/{upload_id}", dependencies=[Depends(auth.implicit_scheme)])
+# async def get_upload(upload_id: str, user: Auth0User = Depends(auth.get_user)):
+#     """
+#     Get a specific upload by ID.
+#     Requires authentication.
+#     """
+#     upload = get_upload_by_id(upload_id)
+#
+#     if not upload:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail=f"Upload with ID {upload_id} not found"
+#         )
+#
+#     # Check if the upload belongs to the authenticated user
+#     if upload["user_email"] != user.email:
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN,
+#             detail="You don't have permission to access this upload"
+#         )
+#
+#     return {"upload": upload, "user": user.email}
 
 

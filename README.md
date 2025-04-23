@@ -56,9 +56,26 @@ This project provides an API for detecting chicken breeds from images using both
 6. Make note of your Auth0 domain (e.g., `your-tenant.auth0.com`) for the `AUTH0_DOMAIN` environment variable
 
 ## Running the Application
+
+### Using Python directly
 ```
 uvicorn main:app --reload
 ```
+
+### Using Docker
+1. Build the Docker image:
+   ```
+   docker build -t ai-chicken-breed .
+   ```
+
+2. Run the Docker container:
+   ```
+   docker run -p 8000:8000 --env-file .env ai-chicken-breed
+   ```
+
+   Note: Make sure your `.env` file contains all the required environment variables as described in the Setup section.
+
+3. Access the API at http://localhost:8000
 
 ## API Endpoints
 

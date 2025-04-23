@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 .DS_Store
 
+test_claude_env/
+
 # C extensions
 *.so
 
