@@ -67,7 +67,7 @@ async def upload_image(image: UploadFile = File(...), user: Auth0User = Depends(
     # )
 
     # return {"results": results, "user": user.email, "upload_id": supabase_response[0]["id"] if supabase_response else None}
-    return {"results": results, "user": user.email}
+    return {"results": results, "user": user}
 
 @app.post("/upload-claude/", dependencies=[Depends(auth.implicit_scheme)])
 async def upload_image_claude(image: UploadFile = File(...), user: Auth0User = Depends(auth.get_user)):

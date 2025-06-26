@@ -91,8 +91,12 @@ def scrape_chicken_prices(url):
 
     # Fetch product data from API
     product_data = get_product_data(product_id)
+
     if not product_data:
         return {}
+    else:
+        print(f"Fetched product data for ID {product_id}")
+        print(product_data)
 
     response = extract_prices(product_data)
     response['url'] = url
