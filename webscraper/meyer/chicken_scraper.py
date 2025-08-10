@@ -35,6 +35,7 @@ def get_ecwid_product_id(url):
 def get_product_data(product_id):
     """Fetch product data from Ecwid API"""
     api_url = f"https://app.ecwid.com/api/v3/19699130/products/{product_id}"
+    print(api_url)
     params = {
         'token': 'public_Tg2T71mhciztnMPKr3Jq7xrR6aWe4DNf'
     }
@@ -48,7 +49,7 @@ def get_product_data(product_id):
 
 
 def extract_prices(product_data):
-    """Extract prices from the combinations data"""
+    """Extract prices from the combination data"""
     if not product_data or 'combinations' not in product_data:
         return {}
 
