@@ -92,7 +92,7 @@ async def upload_image_claude(image: UploadFile = File(...), user: Auth0User = D
     return {"results": results, "user": user.email}
 
 
-@app.get("/meyer/chick-breed/")
+@app.get("/meyer/chick-breed/", dependencies=[Depends(auth.implicit_scheme)])
 async def get_meyer_breed(breed: str, user: Auth0User = Depends(auth.get_user)):
     """
     Get information about a specific breed from Meyer Hatchery.
@@ -100,7 +100,7 @@ async def get_meyer_breed(breed: str, user: Auth0User = Depends(auth.get_user)):
     """
     return scrape_chicken_prices(f"https://meyerhatchery.com/products/{breed}-day-old-chicks")
 
-@app.get("/hoover/chick-breed")
+@app.get("/hoover/chick-breed", dependencies=[Depends(auth.implicit_scheme)])
 async def get_hoover_breed(breed: str, user: Auth0User = Depends(auth.get_user)):
     """
     Get information about a specific breed from Hoover's Hatchery.
@@ -108,7 +108,7 @@ async def get_hoover_breed(breed: str, user: Auth0User = Depends(auth.get_user))
     """
     return scrape_chicken_page(f"https://www.hoovershatchery.com/{breed}")
 
-@app.get("/cackle/chick-breed")
+@app.get("/cackle/chick-breed", dependencies=[Depends(auth.implicit_scheme)])
 async def get_cackle_breed(breed: str, user: Auth0User = Depends(auth.get_user)):
     """
     Get information about a specific breed from Cackle Hatchery.
@@ -116,7 +116,7 @@ async def get_cackle_breed(breed: str, user: Auth0User = Depends(auth.get_user))
     """
     return get_chicken_info(f"https://www.cacklehatchery.com/product/{breed}")
 
-@app.get("/mcmurray/chick-breed")
+@app.get("/mcmurray/chick-breed", dependencies=[Depends(auth.implicit_scheme)])
 async def get_mcmurray_breed(breed: str, user: Auth0User = Depends(auth.get_user)):
     """
     Get information about a specific breed from McMurray Hatchery.
