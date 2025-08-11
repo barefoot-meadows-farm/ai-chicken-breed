@@ -1,3 +1,4 @@
+import logging
 from io import BytesIO
 import os
 from typing import List, Dict, Any
@@ -9,12 +10,18 @@ from starlette.middleware.cors import CORSMiddleware
 
 from run import predict_breed
 from claude_integration import predict_breed_with_claude
-# from supabase_integration import store_image_upload, get_user_uploads, get_upload_by_id
 from webscraper.cackle.chicken_scraper import get_chicken_info
+from webscraper.cackle.scrape_and_upload import CackleScraperIntegration
 from webscraper.chickencoopcompany.chicken_scraper import scrape_chickens
 from webscraper.hoover.hoover_scraper import scrape_chicken_page
 from webscraper.mcmurray.chicken_scraper import scrape_mcmurray_chicken_info
 from webscraper.meyer.chicken_scraper import scrape_chicken_prices
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 # Create a Fast API with an upload endpoint that accepts an image
 app = FastAPI(
@@ -115,6 +122,35 @@ async def get_cackle_breed(breed: str, user: Auth0User = Depends(auth.get_user))
     Requires authentication with read:breeds scope.
     """
     return get_chicken_info(f"https://www.cacklehatchery.com/product/{breed}")
+
+
+# Add this new endpoint
+from webscraper.cackle.scrape_and_upload import CackleScraperIntegration
+
+
+@app.post("/scrape-cackle")
+async def scrape_cackle(background_tasks: BackgroundTasks):
+    def run_scraper():
+        integration = CackleScraperIntegration()
+        integration.scrape_and_upload()
+
+    background_tasks.add_task(run_scraper)
+    return {"message": "Cackle scraping started"}
+
+
+# Add endpoint to update a single Cackle product
+@app.put("/cackle/update-product", dependencies=[Depends(auth.implicit_scheme)])
+async def update_cackle_product(product_url: str, user: Auth0User = Depends(auth.get_user)):
+    """
+    Update a single Cackle product in Supabase.
+    Requires authentication with write:breeds scope.
+    """
+    try:
+        integration = CackleScraperIntegration()
+        result = integration.update_single_product(product_url)
+        return {"message": "Product updated successfully", "product": result}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/mcmurray/chick-breed", dependencies=[Depends(auth.implicit_scheme)])
 async def get_mcmurray_breed(breed: str, user: Auth0User = Depends(auth.get_user)):
